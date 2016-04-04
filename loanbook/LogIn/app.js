@@ -55,15 +55,27 @@ var App = React.createClass({
     var password = state.password;
     var records = state.records;
     var value = {email: "Siena"};
+    var request = {
+      email : $('#signin_email').val()
+    };
       $.ajax({
-          type: "GET",
+          type: "POST",
           contentType: "application/json; charset=utf-8",
-          url: "http://162.144.199.112/JSONWebservice/Service1.svc/validateBorrowerLogin",
+          // url: "http://162.144.199.112/JSONWebService/Service1.svc/validateBorrowerLogin",
+          url: "http://localhost:15021/Service1.svc/validateBorrowerLogin",
+          data : JSON.stringify(request),
           // data: '{ email: "' + email + '", password: "' + password +'"  }',
           // data: value,
           dataType: "json",
+          complete:function(xhr){
+            var result = JSON.stringify(xhr.responseJSON.validateBorrowerLoginResult);
+            console.log('xhr Result: '+ result);
+            console.log('xhr Result: '+ result.Address);
+
+            // alert("success")
+          },
           success: function(msg) {
-            console.log(msg)
+            console.log('msg: '+msg)
 
             this.setState({
                 list: msg,
@@ -73,7 +85,7 @@ var App = React.createClass({
                 ),
             });
             console.log('inside: '+ value);
-            console.log(this.state)
+            console.log('this.state: '+ this.state)
             this.checkAccountType();
           }.bind(this)
         });
